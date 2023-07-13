@@ -3,7 +3,7 @@ import { ConsumerInteraction, ConsumerPact } from '@pact-foundation/pact-core';
 import { JsonMap } from '../../common/jsonTypes';
 import { forEachObjIndexed } from 'ramda';
 import { Path, TemplateHeaders, TemplateQuery, V3MockServer } from '../../v3';
-import { Matcher, matcherValueOrString } from '../../v3/matchers';
+import { Matcher, matcherValueOrString, reify } from '../../v3/matchers';
 import {
   PactV4Options,
   PluginConfig,
@@ -116,8 +116,11 @@ export class InteractionwithRequest implements V4InteractionwithRequest {
     private opts: PactV4Options
   ) {}
 
-  willRespondWith(status: number, builder?: V4ResponseBuilderFunc) {
-    this.interaction.withStatus(status);
+  willRespondWith(
+    status: number | Matcher<number>,
+    builder?: V4ResponseBuilderFunc
+  ) {
+    this.interaction.withStatus(reify(status) as number);
 
     if (typeof builder === 'function') {
       builder(new ResponseBuilder(this.interaction));
@@ -296,7 +299,7 @@ export class InteractionWithPluginRequest
     status: number,
     builder?: V4PluginResponseBuilderFunc
   ): V4InteractionWithPluginResponse {
-    this.interaction.withStatus(status);
+    this.interaction.withStatus(reify(status) as number);
 
     if (typeof builder === 'function') {
       builder(new ResponseWithPluginBuilder(this.interaction));

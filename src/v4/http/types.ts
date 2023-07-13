@@ -1,5 +1,6 @@
 import { JsonMap } from '../../common/jsonTypes';
 import {
+  Matcher,
   Path,
   SpecificationVersion,
   TemplateHeaders,
@@ -71,7 +72,7 @@ export interface V4InteractionWithCompleteRequest {
 
 export interface V4InteractionwithRequest {
   willRespondWith(
-    status: number,
+    status: number | Matcher<number>,
     builder?: V4ResponseBuilderFunc
   ): V4InteractionWithResponse;
 }
@@ -137,7 +138,7 @@ export interface V4InteractionWithPlugin {
 
 export interface V4InteractionWithPluginRequest {
   willRespondWith(
-    status: number,
+    status: number | Matcher<number>,
     builder?: V4PluginResponseBuilderFunc
   ): V4InteractionWithPluginResponse;
 }
